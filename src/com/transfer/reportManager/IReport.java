@@ -5,13 +5,13 @@ import com.transfer.util.ReportMessage;
 public interface IReport {
 	/**
 	 * Add
-	 * @param task
+	 * @param reportMessage
 	 */
 	public void Add(ReportMessage reportMessage);
 	
 	/**
 	 * Remove
-	 * @param task
+	 * @param reportMessage
 	 */
 	public void Remove(ReportMessage reportMessage);
 	
@@ -22,7 +22,7 @@ public interface IReport {
 	public ReportMessage Dequeue();
 	
 	/**
-	 * Whether have tasks
+	 * Whether have reports
 	 * @return
 	 */
 	public boolean HasReports();

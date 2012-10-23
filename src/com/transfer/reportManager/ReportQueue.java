@@ -6,7 +6,7 @@ import java.util.List;
 import com.transfer.util.ReportMessage;
 
 public class ReportQueue implements IReport{
-	//task queue
+	//report queue
 	private List<ReportMessage> _ReportQueue = new ArrayList<ReportMessage>();
 
 	private enum HandleType{
@@ -17,7 +17,7 @@ public class ReportQueue implements IReport{
 	
 	/**
 	 * Add
-	 * @param task
+	 * @param reportMessage
 	 */
 	public void Add(ReportMessage reportMessage){
 		HandlerContext(HandleType.Add, reportMessage);
@@ -25,7 +25,7 @@ public class ReportQueue implements IReport{
 	
 	/**
 	 * Remove
-	 * @param task
+	 * @param reportMessage
 	 */
 	public void Remove(ReportMessage reportMessage){
 		HandlerContext(HandleType.Remove, reportMessage);
@@ -40,7 +40,7 @@ public class ReportQueue implements IReport{
 	}
 	
 	/**
-	 * Whether have tasks
+	 * Whether have reports
 	 */
 	public boolean HasReports() {
 		// TODO Auto-generated method stub
@@ -50,7 +50,7 @@ public class ReportQueue implements IReport{
 	/**
 	 * Handle Context
 	 * @param type
-	 * @param task
+	 * @param reportMessage
 	 * @return
 	 */
 	private synchronized ReportMessage HandlerContext(HandleType type, ReportMessage reportMessage){

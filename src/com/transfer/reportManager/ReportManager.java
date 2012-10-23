@@ -10,7 +10,7 @@ public class ReportManager {
 	private static Map<IClient, ReportQueue> _ReportQueue = new HashMap<IClient, ReportQueue>();
 	
 	/**
-	 * Create task form queue
+	 * Create report queue
 	 */
 	public synchronized static void CreateReportQueue(IClient client){
 		if(!_ReportQueue.containsKey(client)){
@@ -19,7 +19,7 @@ public class ReportManager {
 	}
 	
 	/**
-	 * Remove task form queue
+	 * Remove report queue
 	 * @param client
 	 */
 	public synchronized static void RemoveReportQueue(IClient client){
@@ -29,7 +29,7 @@ public class ReportManager {
 	}
 	
 	/**
-	 * Get TaskQueue Instance
+	 * Get ReportQueue Instance
 	 * @return
 	 */
 	public synchronized static IReport GetInstance(IClient client){

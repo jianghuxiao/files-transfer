@@ -10,7 +10,7 @@ public class ReportSocketManager {
 		private static Map<IClient, ReportSocket> _ReportSocketQueue = new HashMap<IClient, ReportSocket>();
 		
 		/**
-		 * Create task form queue
+		 * Create reportSocket queue
 		 */
 		public synchronized static void CreateMessageSocket(IClient client){
 			if(!_ReportSocketQueue.containsKey(client)){
@@ -19,7 +19,7 @@ public class ReportSocketManager {
 		}
 		
 		/**
-		 * Remove task form queue
+		 * Remove reportSocket queue
 		 * @param client
 		 */
 		public synchronized static void RemoveMessageSocket(IClient client){
@@ -33,7 +33,7 @@ public class ReportSocketManager {
 		}
 		
 		/**
-		 * Get TaskQueue Instance
+		 * Get ReportSocket Instance
 		 * @return
 		 */
 		public synchronized static ReportSocket GetInstance(IClient client){
