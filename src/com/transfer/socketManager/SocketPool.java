@@ -7,18 +7,21 @@ import com.transfer.util.IClient;
 import com.transfer.util.ITask;
 
 public class SocketPool {
-	private IClient _Client = null;
 	
-	//Max socket count
-	private final int MAX_SOCKET_COUNT = 1;
-	//current socket count
-	private int CURRENT_SOCKET_COUNT = 0;
+	private IClient mClient = null;
+	
+	private final int MAX_SOCKET_COUNT = 1;//Max socket count
+	private int CURRENT_SOCKET_COUNT = 0;//current socket count
 
+	/**
+	 * construct
+	 * @param client
+	 */
 	public SocketPool(IClient client){
-		_Client = client;
+		mClient = client;
 		
 		//add SocketPool to SocketPoolManager
-		SocketPoolManager.add(_Client, this);
+		SocketPoolManager.add(mClient, this);
 		
 		run();
 	}
@@ -27,15 +30,15 @@ public class SocketPool {
 	 * Run
 	 */
 	public void run(){
-		IQueue queue = TaskManager.GetInstance(_Client);
+		IQueue queue = TaskManager.getInstance(mClient);
 		if(queue == null)
 			return;
 		
-		if(queue.HasTasks()){
+		if(queue.hasTasks()){
 			if(CURRENT_SOCKET_COUNT >= MAX_SOCKET_COUNT)
 				return;
 
-			ITask task = queue.Dequeue();
+			ITask task = queue.dequeue();
 
 			CURRENT_SOCKET_COUNT++;
 			new DataSocket(this, task);
@@ -49,14 +52,14 @@ public class SocketPool {
 		CURRENT_SOCKET_COUNT --;
 		
 		if(CURRENT_SOCKET_COUNT == 0){
-			if(TaskManager.GetInstance(_Client).HasTasks()){
-				SocketPoolManager.getInstance(_Client).run();
+			if(TaskManager.getInstance(mClient).hasTasks()){
+				SocketPoolManager.getInstance(mClient).run();
 			}else{
-				SocketPoolManager.remove(_Client);
-				TaskManager.RemoveTaskQueue(_Client);
+				SocketPoolManager.remove(mClient);
+				TaskManager.removeTaskQueue(mClient);
 				
-				if(ReportSocketManager.IsExisted(_Client))
-					ReportSocketManager.RemoveMessageSocket(_Client);
+				if(ReportSocketManager.isExisted(mClient))
+					ReportSocketManager.removeMessageSocket(mClient);
 			}
 		}
 	}

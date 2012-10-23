@@ -7,23 +7,23 @@ public interface IReport {
 	 * Add
 	 * @param reportMessage
 	 */
-	public void Add(ReportMessage reportMessage);
+	public void add(ReportMessage reportMessage);
 	
 	/**
 	 * Remove
 	 * @param reportMessage
 	 */
-	public void Remove(ReportMessage reportMessage);
+	public void remove(ReportMessage reportMessage);
 	
 	/**
 	 * Dequeue
 	 * @return
 	 */
-	public ReportMessage Dequeue();
+	public ReportMessage dequeue();
 	
 	/**
 	 * Whether have reports
 	 * @return
 	 */
-	public boolean HasReports();
+	public boolean hasReports();
 }

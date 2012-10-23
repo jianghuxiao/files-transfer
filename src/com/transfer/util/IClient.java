@@ -1,5 +1,5 @@
 package com.transfer.util;
 
 public interface IClient {
-	public String Ip = null;
+	public String mIp = null;
 }

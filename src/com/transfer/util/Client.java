@@ -2,10 +2,10 @@ package com.transfer.util;
 
 public class Client implements IClient {
 
-	public String Ip = null;
+	public String mIp = null;
 	
 	public Client(String ip){
-		this.Ip = ip;
+		this.mIp = ip;
 	}
 
 }

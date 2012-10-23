@@ -7,23 +7,23 @@ public interface IQueue {
 	 * Add
 	 * @param task
 	 */
-	public void Add(ITask task);
+	public void add(ITask task);
 	
 	/**
 	 * Remove
 	 * @param task
 	 */
-	public void Remove(ITask task);
+	public void remove(ITask task);
 	
 	/**
 	 * Dequeue
 	 * @return
 	 */
-	public ITask Dequeue();
+	public ITask dequeue();
 	
 	/**
 	 * Whether have tasks
 	 * @return
 	 */
-	public boolean HasTasks();
+	public boolean hasTasks();
 }

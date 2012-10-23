@@ -6,15 +6,16 @@ import java.util.Map;
 import com.transfer.util.IClient;
 
 public class ReportSocketManager {
+		
 		//Client queue
-		private static Map<IClient, ReportSocket> _ReportSocketQueue = new HashMap<IClient, ReportSocket>();
+		private static Map<IClient, ReportSocket> sReportSocketQueue = new HashMap<IClient, ReportSocket>();
 		
 		/**
 		 * Create reportSocket queue
 		 */
-		public synchronized static void CreateMessageSocket(IClient client){
-			if(!_ReportSocketQueue.containsKey(client)){
-				_ReportSocketQueue.put(client, new ReportSocket(client));
+		public synchronized static void createMessageSocket(IClient client){
+			if(!sReportSocketQueue.containsKey(client)){
+				sReportSocketQueue.put(client, new ReportSocket(client));
 			}
 		}
 		
@@ -22,13 +23,13 @@ public class ReportSocketManager {
 		 * Remove reportSocket queue
 		 * @param client
 		 */
-		public synchronized static void RemoveMessageSocket(IClient client){
-			if(_ReportSocketQueue.containsKey(client)){
-				ReportSocket rs = _ReportSocketQueue.get(client);
-				rs.breakThread();
-				rs.activeReportThread();
+		public synchronized static void removeMessageSocket(IClient client){
+			if(sReportSocketQueue.containsKey(client)){
+				ReportSocket rs = sReportSocketQueue.get(client);
+				rs.stop();
+				rs.resume();
 				
-				_ReportSocketQueue.remove(client);
+				sReportSocketQueue.remove(client);
 			}
 		}
 		
@@ -36,8 +37,8 @@ public class ReportSocketManager {
 		 * Get ReportSocket Instance
 		 * @return
 		 */
-		public synchronized static ReportSocket GetInstance(IClient client){
-			return _ReportSocketQueue.get(client);
+		public synchronized static ReportSocket getInstance(IClient client){
+			return sReportSocketQueue.get(client);
 		}
 		
 		/**
@@ -45,7 +46,7 @@ public class ReportSocketManager {
 		 * @param client
 		 * @return
 		 */
-		public synchronized static boolean IsExisted(IClient client){
-			return _ReportSocketQueue.containsKey(client);
+		public synchronized static boolean isExisted(IClient client){
+			return sReportSocketQueue.containsKey(client);
 		}
 }

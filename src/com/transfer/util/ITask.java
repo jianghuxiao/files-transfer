@@ -1,9 +1,9 @@
 package com.transfer.util;
 
 public interface ITask {
-	public IClient GetClient();
+	public IClient getClient();
 	
-	public String GetFilename();
+	public String getFilename();
 	
-	public String GetFilePath();
+	public String getFilePath();
 }

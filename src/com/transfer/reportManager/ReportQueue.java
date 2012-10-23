@@ -6,8 +6,9 @@ import java.util.List;
 import com.transfer.util.ReportMessage;
 
 public class ReportQueue implements IReport{
+	
 	//report queue
-	private List<ReportMessage> _ReportQueue = new ArrayList<ReportMessage>();
+	private List<ReportMessage> mReportQueue = new ArrayList<ReportMessage>();
 
 	private enum HandleType{
 		Add,
@@ -19,7 +20,7 @@ public class ReportQueue implements IReport{
 	 * Add
 	 * @param reportMessage
 	 */
-	public void Add(ReportMessage reportMessage){
+	public void add(ReportMessage reportMessage){
 		HandlerContext(HandleType.Add, reportMessage);
 	}
 	
@@ -27,7 +28,7 @@ public class ReportQueue implements IReport{
 	 * Remove
 	 * @param reportMessage
 	 */
-	public void Remove(ReportMessage reportMessage){
+	public void remove(ReportMessage reportMessage){
 		HandlerContext(HandleType.Remove, reportMessage);
 	}
 	
@@ -35,16 +36,16 @@ public class ReportQueue implements IReport{
 	 * Dequeue
 	 * @return
 	 */
-	public ReportMessage Dequeue(){
+	public ReportMessage dequeue(){
 		return HandlerContext(HandleType.Dequeue, null);
 	}
 	
 	/**
 	 * Whether have reports
 	 */
-	public boolean HasReports() {
+	public boolean hasReports() {
 		// TODO Auto-generated method stub
-		return _ReportQueue.size() > 0 ? true : false;
+		return mReportQueue.size() > 0 ? true : false;
 	}
 	
 	/**
@@ -58,25 +59,25 @@ public class ReportQueue implements IReport{
 		
 		if(type == HandleType.Add){
 			
-			if(!_ReportQueue.contains(reportMessage)){
-				_ReportQueue.add(reportMessage);
+			if(!mReportQueue.contains(reportMessage)){
+				mReportQueue.add(reportMessage);
 				
-				if(!ReportSocketManager.IsExisted(reportMessage.getClient()))
+				if(!ReportSocketManager.isExisted(reportMessage.getClient()))
 					new ReportSocket(reportMessage.getClient());
 				else
-					ReportSocketManager.GetInstance(reportMessage.getClient()).activeReportThread();
+					ReportSocketManager.getInstance(reportMessage.getClient()).resume();
 			}
 			
 		}else if(type == HandleType.Remove){
 			
-			if(_ReportQueue.contains(reportMessage))
-				_ReportQueue.remove(reportMessage);
+			if(mReportQueue.contains(reportMessage))
+				mReportQueue.remove(reportMessage);
 			
 		}else if(type == HandleType.Dequeue){
 			
-			if(_ReportQueue.size() > 0){
-				result = _ReportQueue.get(0);
-				_ReportQueue.remove(0);
+			if(mReportQueue.size() > 0){
+				result = mReportQueue.get(0);
+				mReportQueue.remove(0);
 			}
 			
 		}

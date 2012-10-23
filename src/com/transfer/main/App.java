@@ -36,14 +36,14 @@ public class App {
 		IClient client = new Client("127.0.0.1");
 		for(int i=0;i<files.length;i++){
 			Task task = new Task(files[i]);
-			task.SetClient(client);
+			task.setClient(client);
 			TransferTool.AddTask(task);
 		}
 		
 		IClient client1 = new Client("127.0.0.1");
 		for(int i=0;i<files1.length;i++){
 			Task task = new Task(files1[i]);
-			task.SetClient(client1);
+			task.setClient(client1);
 			TransferTool.AddTask(task);
 		}
 	}

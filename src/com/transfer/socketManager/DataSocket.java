@@ -15,15 +15,21 @@ import com.transfer.util.IClient;
 import com.transfer.util.ITask;
 
 public class DataSocket {
-	private SocketPool _Sp = null;
 	
-	private IClient _Client = null;
-	private ITask _Task = null;
+	private SocketPool sSocketPool = null;
 	
+	private IClient mClient = null;
+	private ITask mTask = null;
+	
+	/**
+	 * construct
+	 * @param sp
+	 * @param task
+	 */
 	public DataSocket(SocketPool sp, ITask task){
-		_Sp = sp;
-		_Client = task.GetClient();
-		_Task = task;
+		sSocketPool = sp;
+		mClient = task.getClient();
+		mTask = task;
 		
 		(new Thread(runnable)).start();
 	}
@@ -38,12 +44,12 @@ public class DataSocket {
 			DataOutputStream out = null;
 			DataInputStream in = null;
 			try {
-				socket = new Socket(_Client.Ip, Config.Port);
+				socket = new Socket(mClient.mIp, Config.PORT);
 				out = new DataOutputStream(socket.getOutputStream());
 				in = new DataInputStream(socket.getInputStream());
 				
-				while(_Task != null){
-					File file = new File(_Task.GetFilePath());
+				while(mTask != null){
+					File file = new File(mTask.getFilePath());
 					FileInputStream fileIn = new FileInputStream(file);
 
 					System.out.println("filename: " + file.getName());
@@ -61,7 +67,7 @@ public class DataSocket {
 						e.printStackTrace();
 					}
 					
-					_Task = TaskManager.GetInstance(_Client).Dequeue();
+					mTask = TaskManager.getInstance(mClient).dequeue();
 				}
 				
 			} catch (UnknownHostException e) {
@@ -77,7 +83,7 @@ public class DataSocket {
 					socket.close();
 				}catch(IOException e){}
 				
-				_Sp.reduceSocketCount();
+				sSocketPool.reduceSocketCount();
 			}
 		}
 	};

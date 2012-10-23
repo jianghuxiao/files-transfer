@@ -8,8 +8,9 @@ import com.transfer.socketManager.SocketPoolManager;
 import com.transfer.util.ITask;
 
 public class TaskQueue implements IQueue {
+	
 	//task queue
-	private List<ITask> _TaskQueue = new ArrayList<ITask>();
+	private List<ITask> mTaskQueue = new ArrayList<ITask>();
 
 	private enum HandleType{
 		Add,
@@ -21,7 +22,7 @@ public class TaskQueue implements IQueue {
 	 * Add
 	 * @param task
 	 */
-	public void Add(ITask task){
+	public void add(ITask task){
 		HandlerContext(HandleType.Add, task);
 	}
 	
@@ -29,7 +30,7 @@ public class TaskQueue implements IQueue {
 	 * Remove
 	 * @param task
 	 */
-	public void Remove(ITask task){
+	public void remove(ITask task){
 		HandlerContext(HandleType.Remove, task);
 	}
 	
@@ -37,16 +38,16 @@ public class TaskQueue implements IQueue {
 	 * Dequeue
 	 * @return
 	 */
-	public ITask Dequeue(){
+	public ITask dequeue(){
 		return HandlerContext(HandleType.Dequeue, null);
 	}
 	
 	/**
 	 * Whether have tasks
 	 */
-	public boolean HasTasks() {
+	public boolean hasTasks() {
 		// TODO Auto-generated method stub
-		return _TaskQueue.size() > 0 ? true : false;
+		return mTaskQueue.size() > 0 ? true : false;
 	}
 	
 	/**
@@ -59,21 +60,21 @@ public class TaskQueue implements IQueue {
 		ITask result = null;
 		
 		if(type == HandleType.Add){
-			if(!_TaskQueue.contains(task)){
-				_TaskQueue.add(task);
+			if(!mTaskQueue.contains(task)){
+				mTaskQueue.add(task);
 				
-				if(!SocketPoolManager.isExist(task.GetClient()))
-					new SocketPool(task.GetClient());
+				if(!SocketPoolManager.isExist(task.getClient()))
+					new SocketPool(task.getClient());
 				else
-					SocketPoolManager.getInstance(task.GetClient()).run();
+					SocketPoolManager.getInstance(task.getClient()).run();
 			}
 		}else if(type == HandleType.Remove){
-			if(_TaskQueue.contains(task))
-				_TaskQueue.remove(task);
+			if(mTaskQueue.contains(task))
+				mTaskQueue.remove(task);
 		}else if(type == HandleType.Dequeue){
-			if(_TaskQueue.size() > 0){
-				result = _TaskQueue.get(0);
-				_TaskQueue.remove(0);
+			if(mTaskQueue.size() > 0){
+				result = mTaskQueue.get(0);
+				mTaskQueue.remove(0);
 			}
 		}
 		

@@ -1,14 +1,14 @@
 package com.transfer.util;
 
 public class ReportMessage {
-	private IClient client;
+	private IClient mClient;
 	
 	/**
 	 * set
 	 * @param client
 	 */
 	public void setClient(IClient client){
-		this.client = client;
+		this.mClient = client;
 	}
 	
 	/**
@@ -16,6 +16,6 @@ public class ReportMessage {
 	 * @return
 	 */
 	public IClient getClient(){
-		return this.client;
+		return this.mClient;
 	}
 }

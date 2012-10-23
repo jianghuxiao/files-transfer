@@ -1,30 +1,30 @@
 package com.transfer.util;
 
 public class Task implements ITask {
-	private IClient Client = null;
-	private String Filename = null;
-	private String FilePath = null;
+	private IClient mClient = null;
+	private String mFilename = null;
+	private String mFilePath = null;
 	
 	public Task(String filePath){
-		this.FilePath = filePath;
+		this.mFilePath = filePath;
 	}
 	
-	public void SetClient(IClient client){
-		this.Client = client;
+	public void setClient(IClient client){
+		this.mClient = client;
 	}
 
-	public IClient GetClient() {
+	public IClient getClient() {
 		// TODO Auto-generated method stub
-		return Client;
+		return mClient;
 	}
 
-	public String GetFilename() {
+	public String getFilename() {
 		// TODO Auto-generated method stub
-		return Filename;
+		return mFilename;
 	}
 
-	public String GetFilePath() {
+	public String getFilePath() {
 		// TODO Auto-generated method stub
-		return FilePath;
+		return mFilePath;
 	}
 }

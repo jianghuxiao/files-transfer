@@ -9,7 +9,7 @@ public class TransferTool {
 	 * @param task
 	 */
 	public static void AddTask(ITask task){
-		TaskManager.GetInstance(task.GetClient()).Add(task);
+		TaskManager.getInstance(task.getClient()).add(task);
 	}
 	
 	/**
@@ -17,6 +17,6 @@ public class TransferTool {
 	 * @param task
 	 */
 	public static void RemoveTask(ITask task){
-		TaskManager.GetInstance(task.GetClient()).Add(task);
+		TaskManager.getInstance(task.getClient()).add(task);
 	}
 }

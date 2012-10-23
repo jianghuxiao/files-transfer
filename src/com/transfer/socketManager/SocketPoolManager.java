@@ -6,8 +6,9 @@ import java.util.Map;
 import com.transfer.util.IClient;
 
 public class SocketPoolManager {
+	
 	//Socket Manage
-	private static Map<IClient, SocketPool> _SockerPoolManager = new HashMap<IClient, SocketPool>();
+	private static Map<IClient, SocketPool> sSockerPoolManager = new HashMap<IClient, SocketPool>();
 	
 	/**
 	 * Add
@@ -41,7 +42,7 @@ public class SocketPoolManager {
 	 * @return
 	 */
 	public static SocketPool getInstance(IClient client){
-		return _SockerPoolManager.get(client);
+		return sSockerPoolManager.get(client);
 	}
 	
 	private enum HandleType{
@@ -53,13 +54,13 @@ public class SocketPoolManager {
 		boolean result = false;
 		
 		if(type == HandleType.Add){
-			if(!_SockerPoolManager.containsKey(client))
-				_SockerPoolManager.put(client, sp);	
+			if(!sSockerPoolManager.containsKey(client))
+				sSockerPoolManager.put(client, sp);	
 		}else if(type == HandleType.Remove){
-			if(_SockerPoolManager.containsKey(client))
-				_SockerPoolManager.remove(client);
+			if(sSockerPoolManager.containsKey(client))
+				sSockerPoolManager.remove(client);
 		}else if(type == HandleType.IsExist){
-			result = _SockerPoolManager.containsKey(client);
+			result = sSockerPoolManager.containsKey(client);
 		}
 		
 		return result;
