@@ -10,7 +10,7 @@ public class SocketPool {
 	private IClient _Client = null;
 	
 	//Max socket count
-	private final int MAX_SOCKET_COUNT = 3;
+	private final int MAX_SOCKET_COUNT = 1;
 	//current socket count
 	private int CURRENT_SOCKET_COUNT = 0;
 
@@ -49,12 +49,15 @@ public class SocketPool {
 		CURRENT_SOCKET_COUNT --;
 		
 		if(CURRENT_SOCKET_COUNT == 0){
-			SocketPoolManager.remove(_Client);
-			
-			TaskManager.RemoveTaskQueue(_Client);
-			
-			if(ReportSocketManager.IsExisted(_Client))
-				ReportSocketManager.RemoveMessageSocket(_Client);
+			if(TaskManager.GetInstance(_Client).HasTasks()){
+				SocketPoolManager.getInstance(_Client).run();
+			}else{
+				SocketPoolManager.remove(_Client);
+				TaskManager.RemoveTaskQueue(_Client);
+				
+				if(ReportSocketManager.IsExisted(_Client))
+					ReportSocketManager.RemoveMessageSocket(_Client);
+			}
 		}
 	}
 	

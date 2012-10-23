@@ -7,6 +7,7 @@ import com.transfer.util.Task;
 public class App {
 	public static void main(String[] args){
 		String[] files = new String[]{
+				"/home/roy_luo/Roy/photo/eclipse-jee-juno-SR1-linux-gtk.tar.gz",
 				"/home/roy_luo/Roy/photo/nav_logo114.png",
 				"/home/roy_luo/Roy/photo/nav_logo114_4.png",
 				"/home/roy_luo/Roy/photo/nav_logo114_2.png",
