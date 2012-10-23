@@ -1,10 +1,10 @@
 package com.transfer.socketManager;
 
+import com.transfer.custom.IClient;
+import com.transfer.custom.ITask;
 import com.transfer.reportManager.ReportSocketManager;
 import com.transfer.taskManager.IQueue;
 import com.transfer.taskManager.TaskManager;
-import com.transfer.util.IClient;
-import com.transfer.util.ITask;
 
 public class SocketPool {
 	

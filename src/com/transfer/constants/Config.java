@@ -1,4 +1,4 @@
-package com.transfer.util;
+package com.transfer.constants;
 
 public class Config {
 	public static final int PORT = 23056; //SocketServer port

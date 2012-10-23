@@ -1,6 +1,6 @@
-package com.transfer.util;
+package com.transfer.custom;
 
-public class ReportMessage {
+public class Report {
 	private IClient mClient;
 	
 	/**

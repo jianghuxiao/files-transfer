@@ -1,4 +1,4 @@
-package com.transfer.util;
+package com.transfer.custom;
 
 public class Task implements ITask {
 	private IClient mClient = null;

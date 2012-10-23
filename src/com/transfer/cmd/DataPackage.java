@@ -1,4 +1,4 @@
-package com.transfer.command;
+package com.transfer.cmd;
 
 public class DataPackage {
 	public static String generateStartDataPack(String filename, double filesize){

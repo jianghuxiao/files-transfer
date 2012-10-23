@@ -1,4 +1,4 @@
-package com.transfer.util;
+package com.transfer.custom;
 
 public class Client implements IClient {
 

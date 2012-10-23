@@ -1,8 +1,8 @@
 package com.transfer.main;
 
-import com.transfer.util.Client;
-import com.transfer.util.IClient;
-import com.transfer.util.Task;
+import com.transfer.custom.Client;
+import com.transfer.custom.IClient;
+import com.transfer.custom.Task;
 
 public class App {
 	public static void main(String[] args){

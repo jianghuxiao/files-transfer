@@ -1,6 +1,6 @@
 package com.transfer.taskManager;
 
-import com.transfer.util.ITask;
+import com.transfer.custom.ITask;
 
 public interface IQueue {
 	/**

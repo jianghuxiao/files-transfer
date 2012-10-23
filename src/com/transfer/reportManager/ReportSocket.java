@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.transfer.constants.Config;
+import com.transfer.custom.IClient;
+import com.transfer.custom.Report;
 import com.transfer.socketManager.SocketPoolManager;
-import com.transfer.util.Config;
-import com.transfer.util.IClient;
-import com.transfer.util.ReportMessage;
 
 public class ReportSocket {
 	
@@ -88,7 +88,7 @@ public class ReportSocket {
 		try{
 			while(true){
 				
-				ReportMessage rm = ReportManager.getInstance(mClient).dequeue();
+				Report rm = ReportManager.getInstance(mClient).dequeue();
 				if(rm != null){
 					out.writeUTF("");
 					out.flush();

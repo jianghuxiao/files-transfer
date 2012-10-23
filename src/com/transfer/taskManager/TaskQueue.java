@@ -3,9 +3,9 @@ package com.transfer.taskManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.transfer.custom.ITask;
 import com.transfer.socketManager.SocketPool;
 import com.transfer.socketManager.SocketPoolManager;
-import com.transfer.util.ITask;
 
 public class TaskQueue implements IQueue {
 	

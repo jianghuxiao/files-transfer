@@ -1,7 +1,7 @@
 package com.transfer.main;
 
+import com.transfer.custom.ITask;
 import com.transfer.taskManager.TaskManager;
-import com.transfer.util.ITask;
 
 public class TransferTool {
 	/**

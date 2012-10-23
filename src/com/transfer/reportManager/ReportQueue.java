@@ -3,12 +3,12 @@ package com.transfer.reportManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.transfer.util.ReportMessage;
+import com.transfer.custom.Report;
 
 public class ReportQueue implements IReport{
 	
 	//report queue
-	private List<ReportMessage> mReportQueue = new ArrayList<ReportMessage>();
+	private List<Report> mReportQueue = new ArrayList<Report>();
 
 	private enum HandleType{
 		Add,
@@ -20,7 +20,7 @@ public class ReportQueue implements IReport{
 	 * Add
 	 * @param reportMessage
 	 */
-	public void add(ReportMessage reportMessage){
+	public void add(Report reportMessage){
 		HandlerContext(HandleType.Add, reportMessage);
 	}
 	
@@ -28,7 +28,7 @@ public class ReportQueue implements IReport{
 	 * Remove
 	 * @param reportMessage
 	 */
-	public void remove(ReportMessage reportMessage){
+	public void remove(Report reportMessage){
 		HandlerContext(HandleType.Remove, reportMessage);
 	}
 	
@@ -36,7 +36,7 @@ public class ReportQueue implements IReport{
 	 * Dequeue
 	 * @return
 	 */
-	public ReportMessage dequeue(){
+	public Report dequeue(){
 		return HandlerContext(HandleType.Dequeue, null);
 	}
 	
@@ -54,8 +54,8 @@ public class ReportQueue implements IReport{
 	 * @param reportMessage
 	 * @return
 	 */
-	private synchronized ReportMessage HandlerContext(HandleType type, ReportMessage reportMessage){
-		ReportMessage result = null;
+	private synchronized Report HandlerContext(HandleType type, Report reportMessage){
+		Report result = null;
 		
 		if(type == HandleType.Add){
 			

@@ -1,25 +1,25 @@
 package com.transfer.reportManager;
 
-import com.transfer.util.ReportMessage;
+import com.transfer.custom.Report;
 
 public interface IReport {
 	/**
 	 * Add
 	 * @param reportMessage
 	 */
-	public void add(ReportMessage reportMessage);
+	public void add(Report reportMessage);
 	
 	/**
 	 * Remove
 	 * @param reportMessage
 	 */
-	public void remove(ReportMessage reportMessage);
+	public void remove(Report reportMessage);
 	
 	/**
 	 * Dequeue
 	 * @return
 	 */
-	public ReportMessage dequeue();
+	public Report dequeue();
 	
 	/**
 	 * Whether have reports

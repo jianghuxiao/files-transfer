@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.transfer.command.DataPackage;
+import com.transfer.cmd.DataPackage;
+import com.transfer.constants.Config;
+import com.transfer.custom.IClient;
+import com.transfer.custom.ITask;
 import com.transfer.taskManager.TaskManager;
-import com.transfer.util.Config;
-import com.transfer.util.IClient;
-import com.transfer.util.ITask;
 
 public class DataSocket {
 	
