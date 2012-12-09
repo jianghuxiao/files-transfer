@@ -1,30 +1,30 @@
 package com.transfer.report;
 
-import com.transfer.custom.Report;
+import com.util.custom.IReport;
 
 /**
  * IReportTool
  * @author Roy
  *
  */
-public interface IReportTool {
+public interface IReportQueue {
 	/**
 	 * Add
-	 * @param reportMessage
+	 * @param report
 	 */
-	public void add(Report reportMessage);
+	public void add(IReport report);
 	
 	/**
 	 * Remove
-	 * @param reportMessage
+	 * @param report
 	 */
-	public void remove(Report reportMessage);
+	public void remove(IReport report);
 	
 	/**
 	 * Dequeue
 	 * @return
 	 */
-	public Report dequeue();
+	public IReport dequeue();
 	
 	/**
 	 * Whether have reports

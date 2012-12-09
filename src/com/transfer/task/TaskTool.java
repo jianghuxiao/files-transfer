@@ -3,14 +3,13 @@ package com.transfer.task;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.transfer.socket.SendPool;
 import com.transfer.socket.SendPoolManager;
 import com.util.custom.ITask;
 
-public class TaskTool implements ITaskTool {
+class TaskTool implements ITaskTool {
 	
 	//task queue
-	private List<ITask> mTaskQueue = new ArrayList<ITask>();
+	private List<ITask> mTaskTool = new ArrayList<ITask>();
 
 	private enum HandleType{
 		Add,
@@ -47,7 +46,7 @@ public class TaskTool implements ITaskTool {
 	 */
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return mTaskQueue.size() > 0 ? true : false;
+		return mTaskTool.size() > 0 ? true : false;
 	}
 	
 	/**
@@ -60,21 +59,18 @@ public class TaskTool implements ITaskTool {
 		ITask result = null;
 		
 		if(type == HandleType.Add){
-			if(!mTaskQueue.contains(task)){
-				mTaskQueue.add(task);
+			if(!mTaskTool.contains(task)){
+				mTaskTool.add(task);
 				
-				if(!SendPoolManager.isContain(task.getClient()))
-					new SendPool(task.getClient());
-				else
-					SendPoolManager.get(task.getClient()).run();
+				SendPoolManager.add(task.getClient());
 			}
 		}else if(type == HandleType.Remove){
-			if(mTaskQueue.contains(task))
-				mTaskQueue.remove(task);
+			if(mTaskTool.contains(task))
+				mTaskTool.remove(task);
 		}else if(type == HandleType.Dequeue){
-			if(mTaskQueue.size() > 0){
-				result = mTaskQueue.get(0);
-				mTaskQueue.remove(0);
+			if(mTaskTool.size() > 0){
+				result = mTaskTool.get(0);
+				mTaskTool.remove(0);
 			}
 		}
 		

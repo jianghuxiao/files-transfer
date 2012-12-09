@@ -13,7 +13,7 @@ import com.util.custom.IClient;
 public class SendPoolManager {
 	
 	//Socket Pool Manage
-	private static Map<IClient, SendPool> sPoolManager = new HashMap<IClient, SendPool>();
+	private static Map<String, SendPool> sPoolManager = new HashMap<String, SendPool>();
 	
 	/**
 	 * get instance
@@ -21,16 +21,32 @@ public class SendPoolManager {
 	 * @return
 	 */
 	public static SendPool get(IClient client){
-		return sPoolManager.get(client);
+		return sPoolManager.get(client.getIP());
+	}
+	
+	/**
+	 * size
+	 * @param client
+	 * @return
+	 */
+	public static int poolSize(IClient client){
+		int result = 0;
+		if(SendPoolManager.get(client) != null)
+			result = SendPoolManager.get(client).getSocketCount();
+		
+		return result;
 	}
 	
 	/**
 	 * Add
 	 * @param client
-	 * @param sp
+	 * @param pool
 	 */
-	public static void add(IClient client, SendPool sp){
-		handleContext(HandleType.Add, client, sp);
+	public static void add(IClient client){
+		if(!sPoolManager.containsKey(client.getIP()))
+			sPoolManager.put(client.getIP(), new SendPool(client));
+		else
+			SendPoolManager.get(client).run();
 	}
 	
 	/**
@@ -38,7 +54,7 @@ public class SendPoolManager {
 	 * @param client
 	 */
 	public static void remove(IClient client){
-		handleContext(HandleType.Remove, client, null);
+		handleContext(HandleType.Remove, client);
 	}
 	
 	/**
@@ -47,7 +63,7 @@ public class SendPoolManager {
 	 * @return
 	 */
 	public static boolean isContain(IClient client){
-		return handleContext(HandleType.IsExist, client, null);
+		return handleContext(HandleType.IsExist, client);
 	}
 	
 	private enum HandleType{
@@ -55,17 +71,17 @@ public class SendPoolManager {
 		Remove,
 		IsExist
 	}
-	private synchronized static boolean handleContext(HandleType type, IClient client, SendPool sp){
+	private synchronized static boolean handleContext(HandleType type, IClient client){
 		boolean result = false;
 		
 		if(type == HandleType.Add){
-			if(!sPoolManager.containsKey(client))
-				sPoolManager.put(client, sp);	
+			if(!sPoolManager.containsKey(client.getIP()))
+				sPoolManager.put(client.getIP(), new SendPool(client));	
 		}else if(type == HandleType.Remove){
-			if(sPoolManager.containsKey(client))
-				sPoolManager.remove(client);
+			if(sPoolManager.containsKey(client.getIP()))
+				sPoolManager.remove(client.getIP());
 		}else if(type == HandleType.IsExist){
-			result = sPoolManager.containsKey(client);
+			result = sPoolManager.containsKey(client.getIP());
 		}
 		
 		return result;

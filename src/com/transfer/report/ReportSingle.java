@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.transfer.custom.Report;
 import com.transfer.socket.SendPoolManager;
 import com.util.Config;
 import com.util.custom.IClient;
+import com.util.custom.IReport;
 
 /**
  * Report Operation
  * @author Roy
  *
  */
-public class ReportSingle {
+class ReportSingle {
 	
 	private IClient mClient = null;
 	private Thread mCurrentThread = null;
@@ -63,7 +63,7 @@ public class ReportSingle {
 			DataOutputStream out = null;
 			DataInputStream in = null;
 			try {
-				socket = new Socket(mClient.mIp, Config.PORT);
+				socket = new Socket(mClient.getIP(), Config.PORT);
 				out = new DataOutputStream(socket.getOutputStream());
 				in = new DataInputStream(socket.getInputStream());
 								
@@ -93,12 +93,11 @@ public class ReportSingle {
 		try{
 			while(true){
 				
-				Report rm = ReportPoolManager.get(mClient).dequeue();
+				IReport rm = ReportPoolManager.get(mClient).dequeue();
 				if(rm != null){
 					out.writeUTF("");
 					out.flush();
-				}else if(SendPoolManager.get(mClient) == null ||
-						SendPoolManager.get(mClient).getSocketCount() <= 0){
+				}else if(SendPoolManager.poolSize(mClient) <= 0){
 					break;
 				}
 				else{

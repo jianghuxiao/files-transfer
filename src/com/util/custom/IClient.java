@@ -1,5 +1,5 @@
 package com.util.custom;
 
 public interface IClient {
-	public String mIp = null;
+	public String getIP();
 }

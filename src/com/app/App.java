@@ -1,9 +1,6 @@
 package com.app;
 
 import com.transfer.DataTransfer;
-import com.transfer.custom.Client;
-import com.transfer.custom.Task;
-import com.util.custom.IClient;
 
 public class App {
 	public static void main(String[] args){
@@ -20,20 +17,8 @@ public class App {
 				"/home/roy_luo/Roy/photo/01300000860253128749409343844_s.jpg",
 		};
 		
-		String[] files1 = new String[]{
-				"/home/roy_luo/Roy/photo/p1/nav_logo1141.png",
-				"/home/roy_luo/Roy/photo/p1/nav_logo114_41.png",
-				"/home/roy_luo/Roy/photo/p1/nav_logo114_21.png",
-				"/home/roy_luo/Roy/photo/p1/nav_logo114_31.png",
-				"/home/roy_luo/Roy/photo/p1/nav_logo114_51.png",
-				"/home/roy_luo/Roy/photo/p1/69f760edb76ebbee1.jpg",
-				"/home/roy_luo/Roy/photo/p1/6366355_092834195136_21.jpg",
-				"/home/roy_luo/Roy/photo/p1/6906103_194648285000_21.jpg",
-				"/home/roy_luo/Roy/photo/p1/01300000860253128749409343844_s1.jpg",
-		};
-		
 		System.out.println("Thread Start");
 		
-		DataTransfer.AddTask("127.0.0.1", files);
+		DataTransfer.Send("127.0.0.1", files);
 	}
 }

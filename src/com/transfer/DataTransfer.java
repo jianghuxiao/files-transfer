@@ -11,7 +11,7 @@ public class DataTransfer {
 	 * Add task
 	 * @param task
 	 */
-	public static void AddTask(String ipAddress, String[] filesPath){
+	public static void Send(String ipAddress, String[] filesPath){
 		IClient client = new Client(ipAddress);
 		for(int i=0;i<filesPath.length;i++){
 			Task task = new Task(filesPath[i]);

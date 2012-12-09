@@ -19,7 +19,7 @@ import com.util.custom.ITask;
  * @author Roy
  *
  */
-public class SendSingle {
+class SendSingle {
 	
 	private SendPool sSocketPool = null;
 	
@@ -28,11 +28,11 @@ public class SendSingle {
 	
 	/**
 	 * construct
-	 * @param sp
+	 * @param pool
 	 * @param task
 	 */
-	public SendSingle(SendPool sp, ITask task){
-		sSocketPool = sp;
+	public SendSingle(SendPool pool, ITask task){
+		sSocketPool = pool;
 		mClient = task.getClient();
 		mTask = task;
 		
@@ -49,7 +49,7 @@ public class SendSingle {
 			DataOutputStream out = null;
 			DataInputStream in = null;
 			try {
-				socket = new Socket(mClient.mIp, Config.PORT);
+				socket = new Socket(mClient.getIP(), Config.PORT);
 				out = new DataOutputStream(socket.getOutputStream());
 				in = new DataInputStream(socket.getInputStream());
 				

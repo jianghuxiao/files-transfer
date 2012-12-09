@@ -1,9 +1,10 @@
 package com.transfer.custom;
 
 import com.util.custom.IClient;
+import com.util.custom.IReport;
 
 
-public class Report {
+public class Report implements IReport{
 	private IClient mClient;
 	
 	/**

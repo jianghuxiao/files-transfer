@@ -3,19 +3,20 @@ package com.transfer.task;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.transfer.custom.Client;
 import com.util.custom.IClient;
 
 public class TaskToolManager {
 	
 	//Client queue
-	private static Map<IClient, ITaskTool> sClientQueue = new HashMap<IClient, ITaskTool>();
+	private static Map<String, ITaskTool> sTaskToolManager = new HashMap<String, ITaskTool>();
 	
 	/**
 	 * Create task form queue
 	 */
 	public synchronized static void create(IClient client){
-		if(!sClientQueue.containsKey(client)){
-			sClientQueue.put(client, new TaskTool());
+		if(!sTaskToolManager.containsKey(client.getIP())){
+			sTaskToolManager.put(client.getIP(), new TaskTool());
 		}
 	}
 	
@@ -24,8 +25,8 @@ public class TaskToolManager {
 	 * @param client
 	 */
 	public synchronized static void remove(IClient client){
-		if(sClientQueue.containsKey(client)){
-			sClientQueue.remove(client);
+		if(sTaskToolManager.containsKey(client.getIP())){
+			sTaskToolManager.remove(client.getIP());
 		}
 	}
 	
@@ -34,9 +35,9 @@ public class TaskToolManager {
 	 * @return
 	 */
 	public synchronized static ITaskTool get(IClient client){
-		if(sClientQueue.get(client) == null)
+		if(sTaskToolManager.get(client.getIP()) == null)
 			create(client);
 		
-		return sClientQueue.get(client);
+		return sTaskToolManager.get(client.getIP());
 	}
 }

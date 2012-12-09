@@ -1,6 +1,6 @@
 package com.transfer.socket;
 
-import com.transfer.report.ReportPool;
+import com.transfer.report.ReportPoolManager;
 import com.transfer.task.ITaskTool;
 import com.transfer.task.TaskToolManager;
 import com.util.custom.IClient;
@@ -11,7 +11,7 @@ import com.util.custom.ITask;
  * @author Roy
  *
  */
-public class SendPool {
+class SendPool {
 	
 	private IClient mClient = null;
 	
@@ -24,9 +24,6 @@ public class SendPool {
 	 */
 	public SendPool(IClient client){
 		mClient = client;
-		
-		//add SocketPool to SocketPoolManager
-		SendPoolManager.add(mClient, this);
 		
 		run();
 	}
@@ -62,9 +59,7 @@ public class SendPool {
 			}else{
 				SendPoolManager.remove(mClient);
 				TaskToolManager.remove(mClient);
-				
-				if(ReportPool.isContain(mClient))
-					ReportPool.remove(mClient);
+				ReportPoolManager.remove(mClient);
 			}
 		}
 	}

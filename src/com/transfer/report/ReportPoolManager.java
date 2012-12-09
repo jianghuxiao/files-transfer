@@ -12,14 +12,25 @@ import com.util.custom.IClient;
  */
 public class ReportPoolManager {
 	//Client queue
-	private static Map<IClient, ReportTool> sReportPoolManager = new HashMap<IClient, ReportTool>();
+	private static Map<String, ReportQueue> sReportPoolManager = new HashMap<String, ReportQueue>();
+	
+	/**
+	 * Get ReportQueue Instance
+	 * @return
+	 */
+	public synchronized static IReportQueue get(IClient client){
+		if(sReportPoolManager.get(client.getIP()) == null)
+			add(client);
+		
+		return sReportPoolManager.get(client.getIP());
+	}
 	
 	/**
 	 * Create report queue
 	 */
-	public synchronized static void create(IClient client){
-		if(!sReportPoolManager.containsKey(client)){
-			sReportPoolManager.put(client, new ReportTool());
+	public synchronized static void add(IClient client){
+		if(!sReportPoolManager.containsKey(client.getIP())){
+			sReportPoolManager.put(client.getIP(), new ReportQueue());
 		}
 	}
 	
@@ -28,19 +39,8 @@ public class ReportPoolManager {
 	 * @param client
 	 */
 	public synchronized static void remove(IClient client){
-		if(sReportPoolManager.containsKey(client)){
-			sReportPoolManager.remove(client);
+		if(sReportPoolManager.containsKey(client.getIP())){
+			sReportPoolManager.remove(client.getIP());
 		}
-	}
-	
-	/**
-	 * Get ReportQueue Instance
-	 * @return
-	 */
-	public synchronized static IReportTool get(IClient client){
-		if(sReportPoolManager.get(client) == null)
-			create(client);
-		
-		return sReportPoolManager.get(client);
 	}
 }

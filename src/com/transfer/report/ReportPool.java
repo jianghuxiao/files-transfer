@@ -10,25 +10,25 @@ import com.util.custom.IClient;
  * @author Roy
  *
  */
-public class ReportPool {
+class ReportPool {
 		
 		//Client queue
-		private static Map<IClient, ReportSingle> sReportPool = new HashMap<IClient, ReportSingle>();
+		private static Map<String, ReportSingle> sReportPool = new HashMap<String, ReportSingle>();
 		
 		/**
 		 * Get ReportSocket Instance
 		 * @return
 		 */
 		public synchronized static ReportSingle get(IClient client){
-			return sReportPool.get(client);
+			return sReportPool.get(client.getIP());
 		}
 		
 		/**
 		 * Create reportSocket queue
 		 */
 		public synchronized static void create(IClient client){
-			if(!sReportPool.containsKey(client)){
-				sReportPool.put(client, new ReportSingle(client));
+			if(!sReportPool.containsKey(client.getIP())){
+				sReportPool.put(client.getIP(), new ReportSingle(client));
 			}
 		}
 		
@@ -37,8 +37,8 @@ public class ReportPool {
 		 * @param client
 		 */
 		public synchronized static void remove(IClient client){
-			if(sReportPool.containsKey(client)){
-				ReportSingle rs = sReportPool.get(client);
+			if(sReportPool.containsKey(client.getIP())){
+				ReportSingle rs = sReportPool.get(client.getIP());
 				rs.stop();
 				rs.resume();
 				
@@ -52,6 +52,6 @@ public class ReportPool {
 		 * @return
 		 */
 		public synchronized static boolean isContain(IClient client){
-			return sReportPool.containsKey(client);
+			return sReportPool.containsKey(client.getIP());
 		}
 }
