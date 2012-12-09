@@ -1,14 +1,19 @@
-package com.transfer.reportManager;
+package com.transfer.report;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.transfer.custom.Report;
 
-public class ReportQueue implements IReport{
+/**
+ * Report Tool
+ * @author Roy
+ *
+ */
+public class ReportTool implements IReportTool{
 	
 	//report queue
-	private List<Report> mReportQueue = new ArrayList<Report>();
+	private List<Report> mReportTool = new ArrayList<Report>();
 
 	private enum HandleType{
 		Add,
@@ -43,9 +48,9 @@ public class ReportQueue implements IReport{
 	/**
 	 * Whether have reports
 	 */
-	public boolean hasReports() {
+	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return mReportQueue.size() > 0 ? true : false;
+		return mReportTool.size() > 0 ? true : false;
 	}
 	
 	/**
@@ -59,25 +64,25 @@ public class ReportQueue implements IReport{
 		
 		if(type == HandleType.Add){
 			
-			if(!mReportQueue.contains(reportMessage)){
-				mReportQueue.add(reportMessage);
+			if(!mReportTool.contains(reportMessage)){
+				mReportTool.add(reportMessage);
 				
-				if(!ReportSocketManager.isExisted(reportMessage.getClient()))
-					new ReportSocket(reportMessage.getClient());
+				if(!ReportPool.isContain(reportMessage.getClient()))
+					new ReportSingle(reportMessage.getClient());
 				else
-					ReportSocketManager.getInstance(reportMessage.getClient()).resume();
+					ReportPool.get(reportMessage.getClient()).resume();
 			}
 			
 		}else if(type == HandleType.Remove){
 			
-			if(mReportQueue.contains(reportMessage))
-				mReportQueue.remove(reportMessage);
+			if(mReportTool.contains(reportMessage))
+				mReportTool.remove(reportMessage);
 			
 		}else if(type == HandleType.Dequeue){
 			
-			if(mReportQueue.size() > 0){
-				result = mReportQueue.get(0);
-				mReportQueue.remove(0);
+			if(mReportTool.size() > 0){
+				result = mReportTool.get(0);
+				mReportTool.remove(0);
 			}
 			
 		}

@@ -1,5 +1,8 @@
 package com.transfer.custom;
 
+import com.util.custom.IClient;
+import com.util.custom.ITask;
+
 public class Task implements ITask {
 	private IClient mClient = null;
 	private String mFilename = null;

@@ -1,4 +1,4 @@
-package com.transfer.reportManager;
+package com.transfer.report;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -6,12 +6,17 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.transfer.constants.Config;
-import com.transfer.custom.IClient;
 import com.transfer.custom.Report;
-import com.transfer.socketManager.SocketPoolManager;
+import com.transfer.socket.SendPoolManager;
+import com.util.Config;
+import com.util.custom.IClient;
 
-public class ReportSocket {
+/**
+ * Report Operation
+ * @author Roy
+ *
+ */
+public class ReportSingle {
 	
 	private IClient mClient = null;
 	private Thread mCurrentThread = null;
@@ -22,7 +27,7 @@ public class ReportSocket {
 	 * construct
 	 * @param client
 	 */
-	public ReportSocket(IClient client){
+	public ReportSingle(IClient client){
 		mClient = client;
 		
 		mCurrentThread = new Thread(runnable);
@@ -43,8 +48,8 @@ public class ReportSocket {
 	 * bread thread run
 	 */
 	public synchronized void stop(){
-		if(SocketPoolManager.getInstance(mClient) == null ||
-				!ReportManager.getInstance(mClient).hasReports())
+		if(SendPoolManager.get(mClient) == null ||
+				!ReportPoolManager.get(mClient).isEmpty())
 		mIsBreak = true;
 	}
 	
@@ -88,12 +93,12 @@ public class ReportSocket {
 		try{
 			while(true){
 				
-				Report rm = ReportManager.getInstance(mClient).dequeue();
+				Report rm = ReportPoolManager.get(mClient).dequeue();
 				if(rm != null){
 					out.writeUTF("");
 					out.flush();
-				}else if(SocketPoolManager.getInstance(mClient) == null ||
-						SocketPoolManager.getInstance(mClient).getSocketCount() <= 0){
+				}else if(SendPoolManager.get(mClient) == null ||
+						SendPoolManager.get(mClient).getSocketCount() <= 0){
 					break;
 				}
 				else{

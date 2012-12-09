@@ -1,4 +1,4 @@
-package com.transfer.custom;
+package com.util.custom;
 
 public interface ITask {
 	public IClient getClient();

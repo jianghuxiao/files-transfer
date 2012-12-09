@@ -1,5 +1,8 @@
 package com.transfer.custom;
 
+import com.util.custom.IClient;
+
+
 public class Report {
 	private IClient mClient;
 	

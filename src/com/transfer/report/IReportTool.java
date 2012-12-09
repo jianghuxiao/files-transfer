@@ -1,8 +1,13 @@
-package com.transfer.reportManager;
+package com.transfer.report;
 
 import com.transfer.custom.Report;
 
-public interface IReport {
+/**
+ * IReportTool
+ * @author Roy
+ *
+ */
+public interface IReportTool {
 	/**
 	 * Add
 	 * @param reportMessage
@@ -25,5 +30,5 @@ public interface IReport {
 	 * Whether have reports
 	 * @return
 	 */
-	public boolean hasReports();
+	public boolean isEmpty();
 }

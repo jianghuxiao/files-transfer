@@ -1,12 +1,17 @@
-package com.transfer.socketManager;
+package com.transfer.socket;
 
-import com.transfer.custom.IClient;
-import com.transfer.custom.ITask;
-import com.transfer.reportManager.ReportSocketManager;
-import com.transfer.taskManager.IQueue;
-import com.transfer.taskManager.TaskManager;
+import com.transfer.report.ReportPool;
+import com.transfer.task.ITaskTool;
+import com.transfer.task.TaskToolManager;
+import com.util.custom.IClient;
+import com.util.custom.ITask;
 
-public class SocketPool {
+/**
+ * SendPool
+ * @author Roy
+ *
+ */
+public class SendPool {
 	
 	private IClient mClient = null;
 	
@@ -17,11 +22,11 @@ public class SocketPool {
 	 * construct
 	 * @param client
 	 */
-	public SocketPool(IClient client){
+	public SendPool(IClient client){
 		mClient = client;
 		
 		//add SocketPool to SocketPoolManager
-		SocketPoolManager.add(mClient, this);
+		SendPoolManager.add(mClient, this);
 		
 		run();
 	}
@@ -30,18 +35,18 @@ public class SocketPool {
 	 * Run
 	 */
 	public void run(){
-		IQueue queue = TaskManager.getInstance(mClient);
+		ITaskTool queue = TaskToolManager.get(mClient);
 		if(queue == null)
 			return;
 		
-		if(queue.hasTasks()){
+		if(queue.isEmpty()){
 			if(CURRENT_SOCKET_COUNT >= MAX_SOCKET_COUNT)
 				return;
 
 			ITask task = queue.dequeue();
 
 			CURRENT_SOCKET_COUNT++;
-			new DataSocket(this, task);
+			new SendSingle(this, task);
 		}
 	}
 	
@@ -52,14 +57,14 @@ public class SocketPool {
 		CURRENT_SOCKET_COUNT --;
 		
 		if(CURRENT_SOCKET_COUNT == 0){
-			if(TaskManager.getInstance(mClient).hasTasks()){
-				SocketPoolManager.getInstance(mClient).run();
+			if(TaskToolManager.get(mClient).isEmpty()){
+				SendPoolManager.get(mClient).run();
 			}else{
-				SocketPoolManager.remove(mClient);
-				TaskManager.removeTaskQueue(mClient);
+				SendPoolManager.remove(mClient);
+				TaskToolManager.remove(mClient);
 				
-				if(ReportSocketManager.isExisted(mClient))
-					ReportSocketManager.removeMessageSocket(mClient);
+				if(ReportPool.isContain(mClient))
+					ReportPool.remove(mClient);
 			}
 		}
 	}

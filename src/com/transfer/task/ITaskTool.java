@@ -1,8 +1,8 @@
-package com.transfer.taskManager;
+package com.transfer.task;
 
-import com.transfer.custom.ITask;
+import com.util.custom.ITask;
 
-public interface IQueue {
+public interface ITaskTool {
 	/**
 	 * Add
 	 * @param task
@@ -25,5 +25,5 @@ public interface IQueue {
 	 * Whether have tasks
 	 * @return
 	 */
-	public boolean hasTasks();
+	public boolean isEmpty();
 }

@@ -1,8 +1,9 @@
-package com.transfer.main;
+package com.app;
 
+import com.transfer.DataTransfer;
 import com.transfer.custom.Client;
-import com.transfer.custom.IClient;
 import com.transfer.custom.Task;
+import com.util.custom.IClient;
 
 public class App {
 	public static void main(String[] args){
@@ -33,18 +34,6 @@ public class App {
 		
 		System.out.println("Thread Start");
 		
-		IClient client = new Client("127.0.0.1");
-		for(int i=0;i<files.length;i++){
-			Task task = new Task(files[i]);
-			task.setClient(client);
-			TransferTool.AddTask(task);
-		}
-		
-		IClient client1 = new Client("127.0.0.1");
-		for(int i=0;i<files1.length;i++){
-			Task task = new Task(files1[i]);
-			task.setClient(client1);
-			TransferTool.AddTask(task);
-		}
+		DataTransfer.AddTask("127.0.0.1", files);
 	}
 }

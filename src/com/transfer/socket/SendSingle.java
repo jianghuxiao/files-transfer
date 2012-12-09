@@ -1,4 +1,4 @@
-package com.transfer.socketManager;
+package com.transfer.socket;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,14 +9,19 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import com.transfer.cmd.DataPackage;
-import com.transfer.constants.Config;
-import com.transfer.custom.IClient;
-import com.transfer.custom.ITask;
-import com.transfer.taskManager.TaskManager;
+import com.transfer.task.TaskToolManager;
+import com.util.Config;
+import com.util.custom.IClient;
+import com.util.custom.ITask;
 
-public class DataSocket {
+/**
+ * Send Operation
+ * @author Roy
+ *
+ */
+public class SendSingle {
 	
-	private SocketPool sSocketPool = null;
+	private SendPool sSocketPool = null;
 	
 	private IClient mClient = null;
 	private ITask mTask = null;
@@ -26,7 +31,7 @@ public class DataSocket {
 	 * @param sp
 	 * @param task
 	 */
-	public DataSocket(SocketPool sp, ITask task){
+	public SendSingle(SendPool sp, ITask task){
 		sSocketPool = sp;
 		mClient = task.getClient();
 		mTask = task;
@@ -67,7 +72,7 @@ public class DataSocket {
 						e.printStackTrace();
 					}
 					
-					mTask = TaskManager.getInstance(mClient).dequeue();
+					mTask = TaskToolManager.get(mClient).dequeue();
 				}
 				
 			} catch (UnknownHostException e) {

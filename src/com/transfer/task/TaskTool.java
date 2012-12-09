@@ -1,13 +1,13 @@
-package com.transfer.taskManager;
+package com.transfer.task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.transfer.custom.ITask;
-import com.transfer.socketManager.SocketPool;
-import com.transfer.socketManager.SocketPoolManager;
+import com.transfer.socket.SendPool;
+import com.transfer.socket.SendPoolManager;
+import com.util.custom.ITask;
 
-public class TaskQueue implements IQueue {
+public class TaskTool implements ITaskTool {
 	
 	//task queue
 	private List<ITask> mTaskQueue = new ArrayList<ITask>();
@@ -45,7 +45,7 @@ public class TaskQueue implements IQueue {
 	/**
 	 * Whether have tasks
 	 */
-	public boolean hasTasks() {
+	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return mTaskQueue.size() > 0 ? true : false;
 	}
@@ -63,10 +63,10 @@ public class TaskQueue implements IQueue {
 			if(!mTaskQueue.contains(task)){
 				mTaskQueue.add(task);
 				
-				if(!SocketPoolManager.isExist(task.getClient()))
-					new SocketPool(task.getClient());
+				if(!SendPoolManager.isContain(task.getClient()))
+					new SendPool(task.getClient());
 				else
-					SocketPoolManager.getInstance(task.getClient()).run();
+					SendPoolManager.get(task.getClient()).run();
 			}
 		}else if(type == HandleType.Remove){
 			if(mTaskQueue.contains(task))
