@@ -59,8 +59,18 @@ class SendSingle {
 					FileInputStream fileIn = new FileInputStream(file);
 
 					System.out.println("filename: " + file.getName());
-					out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
-					out.flush();
+					
+					try{
+						out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
+						out.flush();
+					}catch(Exception ex){
+						socket = new Socket(mClient.getIP(), Config.PORT);
+						out = new DataOutputStream(socket.getOutputStream());
+						in = new DataInputStream(socket.getInputStream());
+						
+						out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
+						out.flush();
+					}
 					
 					WriteStream(fileIn, out);
 					

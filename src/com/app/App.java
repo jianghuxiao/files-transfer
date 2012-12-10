@@ -21,12 +21,12 @@ public class App {
 		
 		System.out.println("Thread Start");
 
-		File file = new File("C:\\Users\\roy_luo\\Desktop\\Photo");
+		File file = new File("C:\\Users\\Administrator\\Desktop\\photo");
 		String[] files = new String[file.listFiles().length];
 		for(int i=0;i<file.listFiles().length;i++){
 			files[i] = file.listFiles()[i].getAbsolutePath();
 		}
 		
-		DataTransfer.Send("192.168.15.143", files);
+		DataTransfer.Send("127.0.0.1", files);
 	}
 }
