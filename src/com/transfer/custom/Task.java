@@ -8,6 +8,8 @@ public class Task implements ITask {
 	private String mFilename = null;
 	private String mFilePath = null;
 	
+	public int tryCount = 0;
+	
 	public Task(String filePath){
 		this.mFilePath = filePath;
 	}

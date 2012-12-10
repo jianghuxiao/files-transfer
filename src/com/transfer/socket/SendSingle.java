@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import com.transfer.cmd.DataPackage;
+import com.transfer.custom.Task;
 import com.transfer.task.TaskToolManager;
 import com.util.Config;
 import com.util.custom.IClient;
@@ -78,9 +79,21 @@ class SendSingle {
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
+				Task task = (Task)mTask;
+				if(task != null && task.tryCount < 2){
+					TaskToolManager.get(mClient).add(mTask);
+					task.tryCount++;
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
+				Task task = (Task)mTask;
+				if(task != null && task.tryCount < 2){
+					TaskToolManager.get(mClient).add(mTask);
+					task.tryCount++;
+				}
 			}finally{
 				try{
 					in.close();
@@ -114,7 +127,7 @@ class SendSingle {
 		        out.flush();
 		        readCount = 0;
 		        
-		        System.out.println("Read Count: " + readCompletedCount);
+		        //System.out.println("Read Count: " + readCompletedCount);
         	}
         }
         
