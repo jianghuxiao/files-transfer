@@ -57,27 +57,17 @@ class SendSingle {
 				while(mTask != null){
 					File file = new File(mTask.getFilePath());
 					FileInputStream fileIn = new FileInputStream(file);
-
-					System.out.println("filename: " + file.getName());
 					
-					try{
-						out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
-						out.flush();
-					}catch(Exception ex){
-						socket = new Socket(mClient.getIP(), Config.PORT);
-						out = new DataOutputStream(socket.getOutputStream());
-						in = new DataInputStream(socket.getInputStream());
-						
-						out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
-						out.flush();
-					}
+					System.out.println("filename: " + file.getName() + "  socket Count : " + sSocketPool.getSocketCount());
+					out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
+					out.flush();
 					
 					WriteStream(fileIn, out);
 					
 					System.out.println("Completed");
 					
 					try {
-						Thread.sleep(500);
+						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -130,20 +120,17 @@ class SendSingle {
         
         byte[] bytes = new byte[MaxOpacity];
         int readCount = 0;
-        while ((readCompletedCount = fileIn.read(bytes, readCount, bytes.length - readCount)) > 0) {
+        int readLen = MaxOpacity;
+        int fileSize = fileIn.available();
+        if(fileSize - readCount < readLen)
+        	readLen = fileSize - readCount;
+        while ((readCompletedCount = fileIn.read(bytes, 0, readLen)) > 0) {
         	readCount += readCompletedCount;
-        	if(readCount == bytes.length){
-        		out.write(bytes);
-		        out.flush();
-		        readCount = 0;
-		        
-		        //System.out.println("Read Count: " + readCompletedCount);
-        	}
-        }
-        
-        if(readCount > 0){
-        	out.write(bytes);
-        	out.flush();
+        	out.write(bytes, 0, readCompletedCount);
+		    out.flush();
+		    
+		    if(fileSize - readCount < readLen)
+	        	readLen = fileSize - readCount;
         }
 	}
 	

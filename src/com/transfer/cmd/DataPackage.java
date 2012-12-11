@@ -1,7 +1,7 @@
 package com.transfer.cmd;
 
 public class DataPackage {
-	public static String generateStartDataPack(String filename, double filesize){
+	public static String generateStartDataPack(String filename, long filesize){
 		return Command.START_SEND + "," + filename + "," + filesize;
 	}
 	

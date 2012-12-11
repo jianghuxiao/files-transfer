@@ -62,6 +62,8 @@ class SendPool {
 				ReportPoolManager.remove(mClient);
 			}
 		}
+		
+		run();
 	}
 	
 	/**
