@@ -15,7 +15,7 @@ class SendPool {
 	
 	private IClient mClient = null;
 	
-	private final int MAX_SOCKET_COUNT = 1;//Max socket count
+	private final int MAX_SOCKET_COUNT = 3;//Max socket count
 	private int CURRENT_SOCKET_COUNT = 0;//current socket count
 
 	/**

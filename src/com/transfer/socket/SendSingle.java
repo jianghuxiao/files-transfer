@@ -67,7 +67,7 @@ class SendSingle {
 					System.out.println("Completed");
 					
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
