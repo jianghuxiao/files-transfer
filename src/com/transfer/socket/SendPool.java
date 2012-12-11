@@ -15,7 +15,7 @@ class SendPool {
 	
 	private IClient mClient = null;
 	
-	private final int MAX_SOCKET_COUNT = 3;//Max socket count
+	private final int MAX_SOCKET_COUNT = 3;//max socket count
 	private int CURRENT_SOCKET_COUNT = 0;//current socket count
 
 	/**
@@ -36,34 +36,33 @@ class SendPool {
 		if(queue == null)
 			return;
 		
-		if(queue.isEmpty()){
-			if(CURRENT_SOCKET_COUNT >= MAX_SOCKET_COUNT)
-				return;
+		if(queue.isEmpty())
+			return;
+		
+		if(CURRENT_SOCKET_COUNT >= MAX_SOCKET_COUNT)
+			return;
 
-			ITask task = queue.dequeue();
-
-			CURRENT_SOCKET_COUNT++;
-			new SendSingle(this, task);
-		}
+		ITask task = queue.dequeue();
+		new SendSingle(task);
 	}
 	
 	/**
-	 * Reduce socket count
+	 * increase socket count
 	 */
-	public synchronized void reduceSocketCount(){
+	public synchronized void increase(){
+		CURRENT_SOCKET_COUNT++;
+	}
+	
+	/**
+	 * reduce socket count
+	 */
+	public synchronized void reduce(){
 		CURRENT_SOCKET_COUNT --;
 		
-		if(CURRENT_SOCKET_COUNT == 0){
-			if(TaskToolManager.get(mClient).isEmpty()){
-				SendPoolManager.get(mClient).run();
-			}else{
-				SendPoolManager.remove(mClient);
-				TaskToolManager.remove(mClient);
-				ReportPoolManager.remove(mClient);
-			}
-		}
-		
 		run();
+		
+		if(CURRENT_SOCKET_COUNT == 0)
+			handleClient();
 	}
 	
 	/**
@@ -72,5 +71,18 @@ class SendPool {
 	 */
 	public synchronized int getSocketCount(){
 		return CURRENT_SOCKET_COUNT;
+	}
+	
+	/**
+	 * handle client
+	 */
+	private void handleClient(){
+		if(!TaskToolManager.get(mClient).isEmpty()){
+			SendPoolManager.get(mClient).run();
+		}else{
+			SendPoolManager.remove(mClient);
+			TaskToolManager.remove(mClient);
+			ReportPoolManager.remove(mClient);
+		}
 	}
 }

@@ -4,32 +4,36 @@ import com.util.custom.IClient;
 import com.util.custom.ITask;
 
 public class Task implements ITask {
-	private IClient mClient = null;
-	private String mFilename = null;
-	private String mFilePath = null;
+	private IClient client = null;
+	private String filename = null;
+	private String filePath = null;
 	
 	public int tryCount = 0;
 	
 	public Task(String filePath){
-		this.mFilePath = filePath;
+		this.filePath = filePath;
 	}
 	
 	public void setClient(IClient client){
-		this.mClient = client;
+		this.client = client;
 	}
 
 	public IClient getClient() {
 		// TODO Auto-generated method stub
-		return mClient;
+		return client;
+	}
+	
+	public void setFilename(String filename){
+		this.filename = filename;
 	}
 
 	public String getFilename() {
 		// TODO Auto-generated method stub
-		return mFilename;
+		return filename;
 	}
 
 	public String getFilePath() {
 		// TODO Auto-generated method stub
-		return mFilePath;
+		return filePath;
 	}
 }

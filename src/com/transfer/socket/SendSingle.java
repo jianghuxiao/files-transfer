@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -12,6 +13,7 @@ import com.transfer.cmd.DataPackage;
 import com.transfer.custom.Task;
 import com.transfer.task.TaskToolManager;
 import com.util.Config;
+import com.util.LogTool;
 import com.util.custom.IClient;
 import com.util.custom.ITask;
 
@@ -21,9 +23,6 @@ import com.util.custom.ITask;
  *
  */
 class SendSingle {
-	
-	private SendPool sSocketPool = null;
-	
 	private IClient mClient = null;
 	private ITask mTask = null;
 	
@@ -32,11 +31,14 @@ class SendSingle {
 	 * @param pool
 	 * @param task
 	 */
-	public SendSingle(SendPool pool, ITask task){
-		sSocketPool = pool;
+	public SendSingle(ITask task){
+		if(task == null || task.getClient() == null)
+			return;
+
 		mClient = task.getClient();
 		mTask = task;
 		
+		SendPoolManager.get(mTask.getClient()).increase();
 		(new Thread(runnable)).start();
 	}
 	
@@ -49,51 +51,34 @@ class SendSingle {
 			Socket socket = null;
 			DataOutputStream out = null;
 			DataInputStream in = null;
+			
+			boolean isException = false;
+			
 			try {
 				socket = new Socket(mClient.getIP(), Config.PORT);
 				out = new DataOutputStream(socket.getOutputStream());
 				in = new DataInputStream(socket.getInputStream());
 				
 				while(mTask != null){
-					File file = new File(mTask.getFilePath());
-					FileInputStream fileIn = new FileInputStream(file);
+					FileInfo fileInfo = parseFile(mTask);
 					
-					System.out.println("filename: " + file.getName() + "  socket Count : " + sSocketPool.getSocketCount());
-					out.writeUTF(DataPackage.generateStartDataPack(file.getName(), fileIn.available()));
-					out.flush();
+					sendHeadInfo(out, fileInfo.filename, fileInfo.fileSize);
+					sendContent(fileInfo.in, out);
 					
-					WriteStream(fileIn, out);
-					
-					System.out.println("Completed");
-					
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Delay(10);	
 					
 					mTask = TaskToolManager.get(mClient).dequeue();
 				}
-				
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LogTool.printException(e);
 				
-				Task task = (Task)mTask;
-				if(task != null && task.tryCount < 2){
-					TaskToolManager.get(mClient).add(mTask);
-					task.tryCount++;
-				}
+				isException = true;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LogTool.printException(e);
 				
-				Task task = (Task)mTask;
-				if(task != null && task.tryCount < 2){
-					TaskToolManager.get(mClient).add(mTask);
-					task.tryCount++;
-				}
+				isException = true;
 			}finally{
 				try{
 					in.close();
@@ -101,37 +86,112 @@ class SendSingle {
 					socket.close();
 				}catch(IOException e){}
 				
-				sSocketPool.reduceSocketCount();
+				SendPoolManager.get(mTask.getClient()).reduce();
+				
+				if(isException)
+					handleException(mTask);
 			}
 		}
 	};
 	
-	/*
-	 * Write Stream
+	private class FileInfo{
+		String filename = null;
+		long fileSize = 0;
+		FileInputStream in = null;
+	}
+	
+	/**
+	 * parse file
+	 * @param task
+	 * @return
+	 * @throws FileNotFoundException
 	 */
-	private void WriteStream(FileInputStream fileIn, DataOutputStream out) throws IOException{
-		//write file
-        int readCompletedCount;
-        int MaxOpacity = 1024;	//default: 1k; >10M : 1M; > 100M : 10M
-        if(fileIn.available() > 1024*1024*100)
-        	MaxOpacity *= 100;
-        else if(fileIn.available() > 1024*1024*10)
-        	MaxOpacity *= 10;
-        
-        byte[] bytes = new byte[MaxOpacity];
-        int readCount = 0;
-        int readLen = MaxOpacity;
+	private FileInfo parseFile(ITask task) throws FileNotFoundException{
+		FileInfo info = new FileInfo();
+		
+		File file = new File(task.getFilePath());
+		FileInputStream fileIn = new FileInputStream(file);
+		
+		info.filename = file.getName();
+		info.fileSize = file.length();
+		info.in = fileIn;
+		
+		System.out.println("filename: " + info.filename + "  socket Count : " + SendPoolManager.get(mTask.getClient()).getSocketCount());
+		
+		return info;
+	}
+	
+	/**
+	 * send head file infomation
+	 * @param out
+	 * @param filename
+	 * @param fileSize
+	 * @throws IOException
+	 */
+	private void sendHeadInfo(DataOutputStream out, String filename, long fileSize) throws IOException{
+		out.writeUTF(DataPackage.createHeadInfo(filename, fileSize, null));
+		out.flush();
+	}
+	
+	/**
+	 * send file content infomation
+	 * @param fileIn
+	 * @param out
+	 * @throws IOException
+	 */
+	private void sendContent(FileInputStream fileIn, DataOutputStream out) throws IOException{        
+        int bufferCapacity = 1024;	//default: 1k; filesize >10M : 1M; filesize > 100M : 10M
+        int off = bufferCapacity;
+        int readSize;
+        int readTotalSize = 0;
         int fileSize = fileIn.available();
-        if(fileSize - readCount < readLen)
-        	readLen = fileSize - readCount;
-        while ((readCompletedCount = fileIn.read(bytes, 0, readLen)) > 0) {
-        	readCount += readCompletedCount;
-        	out.write(bytes, 0, readCompletedCount);
+        
+        
+        if(fileSize > 1024*1024*100)
+        	bufferCapacity *= 100;
+        else if(fileSize > 1024*1024*10)
+        	bufferCapacity *= 10;
+        
+        byte[] bytes = new byte[bufferCapacity];
+
+        if(fileSize - readTotalSize < off)
+        	off = fileSize - readTotalSize;
+        
+        while ((readSize = fileIn.read(bytes, 0, off)) > 0) {
+        	readTotalSize += readSize;
+        	out.write(bytes, 0, readSize);
 		    out.flush();
 		    
-		    if(fileSize - readCount < readLen)
-	        	readLen = fileSize - readCount;
+		    if(fileSize - readTotalSize < off)
+	        	off = fileSize - readTotalSize;
         }
+        
+        System.out.println("Completed");
+	}
+	
+	/**
+	 * handle exception 
+	 * @param task
+	 */
+	private void handleException(ITask task){
+		Task _task = (Task)task;
+		if(_task != null && _task.tryCount < 2){
+			TaskToolManager.get(mClient).add(task);
+			_task.tryCount++;
+		}
+	}
+	
+	/**
+	 * delay
+	 * @param time
+	 */
+	private void Delay(int time){
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			LogTool.printException(e);
+		}
 	}
 	
 }

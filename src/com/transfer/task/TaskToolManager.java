@@ -3,7 +3,6 @@ package com.transfer.task;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.transfer.custom.Client;
 import com.util.custom.IClient;
 
 public class TaskToolManager {

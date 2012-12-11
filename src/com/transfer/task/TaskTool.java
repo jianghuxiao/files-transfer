@@ -9,7 +9,7 @@ import com.util.custom.ITask;
 class TaskTool implements ITaskTool {
 	
 	//task queue
-	private List<ITask> mTaskTool = new ArrayList<ITask>();
+	private List<ITask> mTaskList = new ArrayList<ITask>();
 
 	private enum HandleType{
 		Add,
@@ -46,7 +46,7 @@ class TaskTool implements ITaskTool {
 	 */
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return mTaskTool.size() > 0 ? true : false;
+		return mTaskList.size() > 0 ? false : true;
 	}
 	
 	/**
@@ -59,18 +59,18 @@ class TaskTool implements ITaskTool {
 		ITask result = null;
 		
 		if(type == HandleType.Add){
-			if(!mTaskTool.contains(task)){
-				mTaskTool.add(task);
+			if(!mTaskList.contains(task)){
+				mTaskList.add(task);
 				
 				SendPoolManager.add(task.getClient());
 			}
 		}else if(type == HandleType.Remove){
-			if(mTaskTool.contains(task))
-				mTaskTool.remove(task);
+			if(mTaskList.contains(task))
+				mTaskList.remove(task);
 		}else if(type == HandleType.Dequeue){
-			if(mTaskTool.size() > 0){
-				result = mTaskTool.get(0);
-				mTaskTool.remove(0);
+			if(mTaskList.size() > 0){
+				result = mTaskList.get(0);
+				mTaskList.remove(0);
 			}
 		}
 		
