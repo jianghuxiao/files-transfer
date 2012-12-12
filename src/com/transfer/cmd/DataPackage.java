@@ -4,7 +4,7 @@ public class DataPackage {
 	
 	public static String createHeadInfo(String filename, long filesize, String message){
 		if(message == null)
-			message = "";
+			message = "null";
 		
 		return filename + "," + filesize + "," + message;
 	}

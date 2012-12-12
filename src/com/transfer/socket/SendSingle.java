@@ -32,13 +32,14 @@ class SendSingle {
 	 * @param task
 	 */
 	public SendSingle(ITask task){
-		if(task == null || task.getClient() == null)
+		if(task == null || task.getClient() == null){
+			SendPoolManager.get(mTask.getClient()).reduce();
 			return;
+		}
 
 		mClient = task.getClient();
 		mTask = task;
 		
-		SendPoolManager.get(mTask.getClient()).increase();
 		(new Thread(runnable)).start();
 	}
 	

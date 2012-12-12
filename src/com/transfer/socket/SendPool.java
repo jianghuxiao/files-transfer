@@ -43,6 +43,7 @@ class SendPool {
 			return;
 
 		ITask task = queue.dequeue();
+		increase();
 		new SendSingle(task);
 	}
 	
